@@ -63,7 +63,7 @@ export async function createScene(canvas, { tier = 'high' } = {}) {
   const renderer = new THREE.WebGLRenderer({
     canvas, antialias: !mobile, alpha: false, powerPreference: 'high-performance', stencil: false,
   });
-  let dprCap = mobile ? 1.5 : 1.75;
+  let dprCap = mobile ? 1.5 : 1.5;
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, dprCap));
   renderer.setClearColor(BG, 1);
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -96,7 +96,7 @@ export async function createScene(canvas, { tier = 'high' } = {}) {
   world.add(coreGroup);
 
   const coreUniforms = { uTime: { value: 0 }, uAmp: { value: 0.22 }, uFreq: { value: 1.05 } };
-  const coreGeo = new THREE.IcosahedronGeometry(1.25, mobile ? 18 : 40);
+  const coreGeo = new THREE.IcosahedronGeometry(1.25, mobile ? 16 : 32);
   const coreMat = new THREE.MeshPhysicalMaterial({
     color: 0x9c9cab, metalness: 1, roughness: 0.16,
     clearcoat: 1, clearcoatRoughness: 0.1,
@@ -239,6 +239,41 @@ export async function createScene(canvas, { tier = 'high' } = {}) {
   });
   const particles = new THREE.Points(pGeo, pMat);
   scene.add(particles);
+
+  // ---------- Wireframe cage (counter-rotating geodesic shell) ----------
+  const cageMat = new THREE.LineBasicMaterial({ color: VOLT.clone(), transparent: true, opacity: 0.22, blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false });
+  const cage = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.IcosahedronGeometry(1.72, 1)), cageMat);
+  coreGroup.add(cage);
+
+  // ---------- Shockwave pulse (section changes, taps) ----------
+  const shockMat = new THREE.MeshBasicMaterial({ color: VOLT.clone().multiplyScalar(2), transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false, side: THREE.DoubleSide });
+  const shock = new THREE.Mesh(new THREE.RingGeometry(0.96, 1, 96), shockMat);
+  shock.visible = false;
+  scene.add(shock);
+  const pulse = { t: 1 };
+
+  // ---------- Shooting stars ----------
+  const starMat = new THREE.ShaderMaterial({
+    uniforms: { uColor: { value: new THREE.Color(0xffffff) } },
+    vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
+    fragmentShader: 'uniform vec3 uColor; varying vec2 vUv; void main(){ float a = pow(vUv.x, 3.0) * (1.0 - abs(vUv.y - 0.5) * 2.0); gl_FragColor = vec4(uColor * 2.0, a); }',
+    transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+  });
+  const starGeo = new THREE.PlaneGeometry(2.2, 0.025);
+  const stars = Array.from({ length: mobile ? 2 : 5 }, () => {
+    const m = new THREE.Mesh(starGeo, starMat);
+    const st = { m, v: new THREE.Vector3(), wait: Math.random() * 6 };
+    m.visible = false;
+    scene.add(m);
+    return st;
+  });
+  function spawnStar(st) {
+    const dir = Math.random() < 0.5 ? 1 : -1;
+    st.m.position.set(-dir * (9 + Math.random() * 4), 2 + Math.random() * 5, -6 - Math.random() * 8);
+    st.v.set(dir * (10 + Math.random() * 8), -(3 + Math.random() * 3), 0);
+    st.m.rotation.z = Math.atan2(st.v.y, st.v.x);
+    st.m.visible = true;
+  }
 
   // ---------- Morphing particle sculpture ----------
   // Every section owns a target shape; all targets live in one float texture and the
@@ -440,8 +475,11 @@ export async function createScene(canvas, { tier = 'high' } = {}) {
       .sort((a, b) => a.top - b.top);
   }
 
+  let sectionIdx = -1;
+  function firePulse() { if (!reduce) pulse.t = 0; }
   function computeTarget(y) {
     for (const k of KEYS) tgt[k] = KF.hero[k];
+    let idx = 0;
     const vh = h;
     for (let i = 1; i < anchors.length; i++) {
       const a = anchors[i];
@@ -450,7 +488,9 @@ export async function createScene(canvas, { tier = 'high' } = {}) {
       const e = t * t * (3 - 2 * t);
       const kf = KF[a.key];
       for (const k of KEYS) tgt[k] += (kf[k] - tgt[k]) * e;
+      if (t > 0.55) idx = i;
     }
+    if (idx !== sectionIdx) { if (sectionIdx !== -1) firePulse(); sectionIdx = idx; }
     if (mobile) {
       // Mobile: keep the hero object centred behind content and quieter.
       tgt.px *= 0.18;
@@ -472,7 +512,7 @@ export async function createScene(canvas, { tier = 'high' } = {}) {
     camera.fov = baseFov;
     camera.updateProjectionMatrix();
     renderer.setSize(w, h, false);
-    if (composer) { composer.setSize(w, h); composer.setPixelRatio(renderer.getPixelRatio()); }
+    if (composer) { composer.setPixelRatio(Math.min(renderer.getPixelRatio(), 1.25)); composer.setSize(w, h); }
     pMat.uniforms.uPR.value = renderer.getPixelRatio();
     mMat.uniforms.uPR.value = renderer.getPixelRatio();
     refresh();
@@ -480,7 +520,7 @@ export async function createScene(canvas, { tier = 'high' } = {}) {
 
   const tmpColor = new THREE.Color();
   const look = new THREE.Vector3();
-  let frames = 0, perfAcc = 0, perfChecked = false;
+  let frames = 0, perfAcc = 0, qLevel = 0;
 
   function frame(dt) {
     time += reduce ? 0 : dt;
@@ -552,6 +592,35 @@ export async function createScene(canvas, { tier = 'high' } = {}) {
     }
     debris.instanceMatrix.needsUpdate = true;
 
+    // Pulse
+    let pk = 0;
+    if (pulse.t < 1) {
+      pulse.t = Math.min(1, pulse.t + dt / 1.3);
+      const e = 1 - Math.pow(1 - pulse.t, 3);
+      pk = Math.pow(1 - pulse.t, 2);
+      shock.visible = true;
+      shock.position.copy(coreGroup.position);
+      shock.quaternion.copy(camera.quaternion);
+      shock.scale.setScalar(cur.s * (1.3 + e * 3.6));
+      shockMat.opacity = pk * 0.6;
+      shockMat.color.copy(tmpColor).multiplyScalar(2);
+    } else shock.visible = false;
+    coreUniforms.uAmp.value += pk * 0.35;
+
+    // Cage
+    cage.rotation.y = -spinAccum * 0.6;
+    cage.rotation.x = time * 0.07;
+    cage.scale.setScalar((1 + (cur.ring - 1) * 0.35) * (1 + pk * 0.4));
+    cageMat.color.copy(tmpColor);
+    cageMat.opacity = (0.16 + pk * 0.5) * introEase * cur.dim;
+
+    // Shooting stars
+    for (const st of stars) {
+      if (!st.m.visible) { st.wait -= dt; if (st.wait <= 0 && introEase > 0.9) spawnStar(st); continue; }
+      st.m.position.addScaledVector(st.v, dt);
+      if (Math.abs(st.m.position.x) > 16 || st.m.position.y < -8) { st.m.visible = false; st.wait = 2 + Math.random() * 7; }
+    }
+
     // Morph sculpture
     mSpin += dt * (0.12 + vAbs * 0.006);
     morphGroup.position.set(cur.mx, cur.my, cur.mz);
@@ -562,7 +631,7 @@ export async function createScene(canvas, { tier = 'high' } = {}) {
     mMat.uniforms.uSpin.value = mSpin;
     mMat.uniforms.uTime.value = time;
     mMat.uniforms.uWave.value = cur.wave;
-    mMat.uniforms.uKick.value = Math.min(vAbs * 0.006, 0.35);
+    mMat.uniforms.uKick.value = Math.min(vAbs * 0.006, 0.35) + pk * 0.6;
     mMat.uniforms.uOpacity.value = cur.mo * cur.dim * introEase;
     mMat.uniforms.uColA.value.copy(tmpColor);
     mMat.uniforms.uColB.value.copy(VIOLET).lerp(VOLT, cur.hue);
@@ -578,16 +647,18 @@ export async function createScene(canvas, { tier = 'high' } = {}) {
 
     if (composer) composer.render(dt); else renderer.render(scene, camera);
 
-    // Adaptive quality: if the device struggles, shed the expensive bits once.
-    if (!perfChecked && introEase > 0.9) {
+    // Adaptive quality: keep sampling; shed cost in steps while frames run slow.
+    if (introEase > 0.9 && qLevel < 3) {
       frames++; perfAcc += dt;
-      if (frames >= 90) {
-        perfChecked = true;
+      if (frames >= 120) {
         const avg = perfAcc / frames;
-        if (avg > 1 / 40) {
-          composer = null;
-          dprCap = 1;
-          renderer.setPixelRatio(1);
+        frames = 0; perfAcc = 0;
+        if (avg > 1 / 48) {
+          qLevel++;
+          if (qLevel === 1) { rgbShift = null; if (composer && composer.passes[2]) composer.passes[2].enabled = false; dprCap = 1.25; }
+          if (qLevel === 2) { composer = null; dprCap = 1; }
+          if (qLevel === 3) { pMat.uniforms.uSize.value *= 0.8; debris.visible = false; }
+          renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, dprCap));
           resize();
         }
       }
@@ -613,9 +684,11 @@ export async function createScene(canvas, { tier = 'high' } = {}) {
     refresh,
     setPointer(x, y) { pointer.x = x; pointer.y = y; },
     setVelocity(v) { velocity = v; },
+    pulse: firePulse,
     playIntro() {
       if (reduce || !window.gsap) { intro.v = 1; return; }
       window.gsap.to(intro, { v: 1, duration: 2.6, ease: 'expo.out' });
+      window.gsap.delayedCall(0.5, firePulse);
     },
   };
 }

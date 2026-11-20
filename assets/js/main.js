@@ -784,6 +784,58 @@ function setupSignature() {
   });
 }
 
+
+/* ---------------------------------------------------------
+   Extra 3D motion: hero depth tilt, flip-in cards, unfolding rows, taps
+   --------------------------------------------------------- */
+function setup3D() {
+  if (reduce) return;
+  // Hero title follows the cursor in depth.
+  if (finePointer) {
+    const title = $('.hero__title');
+    gsap.set(title, { transformPerspective: 1200 });
+    const rx = gsap.quickTo(title, 'rotationX', { duration: 1, ease: 'power3' });
+    const ry = gsap.quickTo(title, 'rotationY', { duration: 1, ease: 'power3' });
+    const hero = $('.hero');
+    hero.addEventListener('pointermove', (e) => {
+      ry((e.clientX / innerWidth - 0.5) * 10);
+      rx(-(e.clientY / innerHeight - 0.5) * 8);
+    });
+    hero.addEventListener('pointerleave', () => { rx(0); ry(0); });
+  }
+
+  // Skill cards flip in like dealt cards.
+  gsap.from('.skill-card', {
+    rotationY: -75, z: -200, opacity: 0, transformOrigin: '0% 50%', duration: 1.4, stagger: 0.12, ease: 'expo.out',
+    scrollTrigger: { trigger: '.skill-cards', start: 'top 85%', toggleActions: 'play none none reverse' },
+  });
+  // Stats tumble up on the X axis.
+  gsap.from('.stat__num', {
+    rotationX: -90, yPercent: 40, opacity: 0, transformOrigin: '50% 100%', transformPerspective: 800, duration: 1.3, stagger: 0.1, ease: 'expo.out',
+    scrollTrigger: { trigger: '.stats', start: 'top 85%', toggleActions: 'play none none reverse' },
+  });
+  // About mini cards rise from depth.
+  gsap.from('.mini-card', {
+    z: -320, rotationX: 35, opacity: 0, duration: 1.4, stagger: 0.1, ease: 'expo.out',
+    scrollTrigger: { trigger: '.about__cards', start: 'top 88%', toggleActions: 'play none none reverse' },
+  });
+  // Step text panels swing in.
+  $$('.step__text').forEach((el) => {
+    gsap.from(el, {
+      rotationY: 25, x: -60, transformPerspective: 1400, transformOrigin: '0% 50%', duration: 1.5, ease: 'expo.out',
+      scrollTrigger: { trigger: el, start: 'top 80%', toggleActions: 'play none none reverse' },
+    });
+  });
+  // Contact CTA floats in 3D.
+  gsap.to('.cta', { rotationY: 360, duration: 1.6, ease: 'expo.out', scrollTrigger: { trigger: '.contact__row', start: 'top 70%', toggleActions: 'play none none reverse' } });
+
+  // Tap / click on empty space sends a shockwave through the 3D scene.
+  window.addEventListener('pointerdown', (e) => {
+    if (e.target.closest('a, button, .sphere, .project, input')) return;
+    scene?.pulse?.();
+  }, { passive: true });
+}
+
 /* ---------------------------------------------------------
    Clock
    --------------------------------------------------------- */
@@ -803,7 +855,7 @@ function setupVelocityBridge() {
   // Big titles lean into the scroll direction, then settle.
   const skewEls = (reduce || !finePointer) ? [] : $$('[data-skew]');
   const skewSet = skewEls.map((el) => gsap.quickSetter(el, 'skewY', 'deg'));
-  let skew = 0;
+  let skew = 0, lastSkew = 0;
   gsap.ticker.add(() => {
     const y = window.scrollY;
     const v = lenis ? lenis.velocity : y - lastY;
@@ -812,7 +864,7 @@ function setupVelocityBridge() {
     if (skewSet.length) {
       skew += (gsap.utils.clamp(-4, 4, -v * 0.12) - skew) * 0.12;
       const val = Math.abs(skew) > 0.01 ? skew : 0;
-      skewSet.forEach((set) => set(val));
+      if (val !== lastSkew) { skewSet.forEach((set) => set(val)); lastSkew = val; }
     }
     if (marqueeTweens.length) {
       const boost = 1 + Math.min(Math.abs(v) * 0.08, 5);
@@ -870,6 +922,7 @@ async function boot() {
   setupProcess();
   setupDividers();
   setupSignature();
+  setup3D();
   textAnimations();
   reveals();
   counters();
