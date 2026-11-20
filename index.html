@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Ajay Sri Ramm — Software Engineer</title>
+  <meta name="description" content="B. Ajay Sri Ramm — Software Engineer building scalable full-stack products with Java, TypeScript and modern web technologies." />
+  <meta name="theme-color" content="#060608" />
+  <meta property="og:title" content="Ajay Sri Ramm — Software Engineer" />
+  <meta property="og:description" content="Full-stack software engineer. Java, TypeScript, React, Angular, Node.js, PostgreSQL." />
+  <meta property="og:type" content="website" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/css/style.css" />
+
+  <script>
+    // Boot flags: run before paint so hidden initial states never flash.
+    (function () {
+      var d = document.documentElement;
+      d.classList.add('js');
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduce) d.classList.add('reduced-motion');
+      // Safety net: if scripts fail, never leave the visitor stuck behind the loader.
+      window.__bootTimer = setTimeout(function () {
+        if (!window.__booted) { d.classList.remove('js'); d.classList.add('no-boot'); }
+      }, 9000);
+    })();
+  </script>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "/assets/vendor/three-0.170.0/three.module.min.js",
+        "three/addons/": "/assets/vendor/three-0.170.0/addons/"
+      }
+    }
+  </script>
+  <link rel="modulepreload" href="/assets/js/main.js" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ===== Loader ===== -->
+  <div class="loader" id="loader" aria-hidden="true">
+    <div class="loader__panels">
+      <span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <div class="loader__inner">
+      <div class="loader__top">
+        <span class="mono">Portfolio / 2026</span>
+        <span class="mono">Software Engineer</span>
+      </div>
+      <div class="loader__name">
+        <span class="loader__word">Ajay</span>
+        <span class="loader__word loader__word--serif">Sri&nbsp;Ramm</span>
+      </div>
+      <div class="loader__bottom">
+        <div class="loader__bar"><i></i></div>
+        <div class="loader__count"><span id="loaderCount">000</span><sup>%</sup></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== WebGL stage & ambience ===== -->
+  <canvas class="stage" id="stage" aria-hidden="true"></canvas>
+  <div class="fallback-bg" aria-hidden="true"><i></i><i></i><i></i></div>
+  <div class="vignette" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- ===== Cursor ===== -->
+  <div class="cursor" aria-hidden="true">
+    <div class="cursor__ring"><span class="cursor__label"></span></div>
+    <div class="cursor__dot"></div>
+  </div>
+
+  <div class="scroll-progress" aria-hidden="true"><i></i></div>
+
+  <!-- ===== Navigation ===== -->
+  <header class="nav" id="nav">
+    <a href="#hero" class="nav__logo" data-magnetic aria-label="Back to top">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M8 32 L20 8 L32 32 M13 23 H27" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Ajay&nbsp;Sri&nbsp;Ramm</span>
+    </a>
+    <nav class="nav__links" aria-label="Primary">
+      <a href="#about" data-scramble>About</a>
+      <a href="#skills" data-scramble>Skills</a>
+      <a href="#work" data-scramble>Work</a>
+      <a href="#journey" data-scramble>Journey</a>
+      <a href="#achievements" data-scramble>Achievements</a>
+    </nav>
+    <a href="#contact" class="nav__cta" data-magnetic><span>Let's talk</span><i></i></a>
+    <button class="nav__burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu">
+      <span></span><span></span>
+    </button>
+  </header>
+
+  <!-- ===== Mobile menu ===== -->
+  <div class="menu" id="menu" aria-hidden="true">
+    <div class="menu__bg"></div>
+    <div class="menu__inner">
+      <span class="mono menu__label">Navigation</span>
+      <ul class="menu__list">
+        <li><a href="#hero"><em>01</em><span>Home</span></a></li>
+        <li><a href="#about"><em>02</em><span>About</span></a></li>
+        <li><a href="#skills"><em>03</em><span>Skills</span></a></li>
+        <li><a href="#work"><em>04</em><span>Work</span></a></li>
+        <li><a href="#journey"><em>05</em><span>Journey</span></a></li>
+        <li><a href="#achievements"><em>06</em><span>Achievements</span></a></li>
+        <li><a href="#contact"><em>07</em><span>Contact</span></a></li>
+      </ul>
+      <div class="menu__foot">
+        <a href="mailto:ajaysriramm90@gmail.com">ajaysriramm90@gmail.com</a>
+        <div class="menu__socials">
+          <a href="https://www.linkedin.com/in/ajaysriramm" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://github.com/ajaysriramm90-droid" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main id="main">
+
+    <!-- ===== 01 HERO ===== -->
+    <section class="hero" id="hero" data-scene="hero">
+      <div class="hero__meta hero__meta--tl mono">
+        <span data-intro-fade>Based in Chennai, India</span>
+        <span data-intro-fade class="clock" data-clock>IST 00:00:00</span>
+      </div>
+      <div class="hero__meta hero__meta--tr mono">
+        <span data-intro-fade class="status"><i></i>Available for work</span>
+      </div>
+
+      <div class="hero__content">
+        <p class="hero__eyebrow mono" data-intro-scramble>Software Engineer — Full Stack</p>
+        <h1 class="hero__title" aria-label="Ajay Sri Ramm">
+          <span class="hero__line"><span class="hero__word" data-hero-split>Ajay</span></span>
+          <span class="hero__line hero__line--indent"><span class="hero__word serif" data-hero-split>Sri</span><span class="hero__word" data-hero-split>Ramm</span></span>
+        </h1>
+        <div class="hero__bottom">
+          <p class="hero__lead" data-intro-lines>I engineer scalable, type-safe web products — from GraphQL APIs and databases to interfaces that feel effortless.</p>
+          <a href="#work" class="hero__scroll" data-intro-fade data-magnetic>
+            <span class="mono">Scroll to explore</span>
+            <span class="hero__scroll-track"><i></i></span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 02 ABOUT ===== -->
+    <section class="section about" id="about" data-scene="about">
+      <div class="container">
+        <header class="section__head">
+          <span class="section__index mono" data-scramble-in>01 / About</span>
+          <span class="section__rule" data-rule></span>
+        </header>
+        <div class="about__grid">
+          <h2 class="about__heading" data-split-heading>
+            Code with <em class="serif">intent.</em><br />Products with <em class="serif">soul.</em>
+          </h2>
+          <p class="about__text" data-word-fill>
+            I'm Ajay — a software engineer with a strong focus on Java and modern web technologies. I recently completed my B.Tech in Information Technology at Panimalar Engineering College, Chennai City Campus. I love building scalable web applications, designing clean APIs and solving real-world problems through code — and I'm always learning, always sharpening the craft.
+          </p>
+        </div>
+        <div class="about__cards">
+          <article class="mini-card" data-reveal data-tilt>
+            <span class="mono">Focus</span>
+            <strong>Full-stack engineering</strong>
+            <p>Java · TypeScript · Node.js · GraphQL · REST</p>
+          </article>
+          <article class="mini-card" data-reveal data-tilt>
+            <span class="mono">Approach</span>
+            <strong>Scalable by design</strong>
+            <p>Type-safe data layers, clean architecture, tested flows.</p>
+          </article>
+          <article class="mini-card" data-reveal data-tilt>
+            <span class="mono">Currently</span>
+            <strong>Open to SDE roles</strong>
+            <p>Graduating 2026 · Chennai · Remote-friendly</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 03 SKILLS ===== -->
+    <section class="section skills" id="skills" data-scene="skills">
+      <div class="container">
+        <header class="section__head">
+          <span class="section__index mono" data-scramble-in>02 / Skills &amp; Expertise</span>
+          <span class="section__rule" data-rule></span>
+        </header>
+        <div class="skills__grid">
+          <div class="skills__intro">
+            <h2 class="section__title" data-split-heading>A toolkit built for <em class="serif">shipping.</em></h2>
+            <p class="muted" data-reveal>Drag, hover or tap the sphere — every node is a technology I've used to build real products.</p>
+          </div>
+          <div class="sphere" id="sphere" data-cursor="Drag" aria-label="Interactive skills sphere" role="img"></div>
+        </div>
+
+        <div class="skill-cards">
+          <article class="skill-card" data-reveal data-spotlight>
+            <span class="skill-card__no mono">/01</span>
+            <h3>Languages</h3>
+            <ul><li>Java</li><li>Python</li><li>TypeScript</li><li>JavaScript</li><li>SQL</li><li>HTML</li><li>CSS</li></ul>
+          </article>
+          <article class="skill-card" data-reveal data-spotlight>
+            <span class="skill-card__no mono">/02</span>
+            <h3>Frameworks</h3>
+            <ul><li>React</li><li>Angular</li><li>Node.js</li><li>Express</li><li>GraphQL</li><li>Flask</li><li>Bootstrap</li></ul>
+          </article>
+          <article class="skill-card" data-reveal data-spotlight>
+            <span class="skill-card__no mono">/03</span>
+            <h3>Databases</h3>
+            <ul><li>PostgreSQL</li><li>MongoDB</li><li>SQL</li><li>Firebase</li><li>Supabase</li><li>SQLite</li></ul>
+          </article>
+          <article class="skill-card" data-reveal data-spotlight>
+            <span class="skill-card__no mono">/04</span>
+            <h3>Tools &amp; QA</h3>
+            <ul><li>Git</li><li>GitHub</li><li>Docker</li><li>VS Code</li><li>Eclipse</li><li>Jupyter</li><li>Selenium</li><li>TestNG</li></ul>
+          </article>
+        </div>
+      </div>
+
+      <div class="marquee" data-marquee aria-hidden="true">
+        <div class="marquee__row" data-dir="1">
+          <span>Java</span><b>✦</b><span class="serif">TypeScript</span><b>✦</b><span>React</span><b>✦</b><span class="serif">Angular</span><b>✦</b><span>Node.js</span><b>✦</b><span class="serif">GraphQL</span><b>✦</b><span>PostgreSQL</span><b>✦</b><span class="serif">Docker</span><b>✦</b>
+        </div>
+        <div class="marquee__row marquee__row--outline" data-dir="-1">
+          <span>MongoDB</span><b>✦</b><span>Python</span><b>✦</b><span>Flask</span><b>✦</b><span>scikit-learn</span><b>✦</b><span>Selenium</span><b>✦</b><span>Supabase</span><b>✦</b><span>Express</span><b>✦</b><span>AWS</span><b>✦</b>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 04 WORK ===== -->
+    <section class="section work" id="work" data-scene="work">
+      <div class="work__pin">
+        <div class="container work__head">
+          <header class="section__head">
+            <span class="section__index mono" data-scramble-in>03 / Selected Work</span>
+            <span class="section__rule" data-rule></span>
+          </header>
+          <div class="work__title-row">
+            <h2 class="section__title" data-split-heading>Featured <em class="serif">projects.</em></h2>
+            <div class="work__progress mono" aria-hidden="true"><span id="workCurrent">01</span><i><b id="workBar"></b></i><span>06</span></div>
+          </div>
+        </div>
+
+        <div class="work__track" id="workTrack">
+          <article class="project" style="--h:84" data-cursor="View">
+            <div class="project__inner">
+              <div class="project__visual" aria-hidden="true">
+                <div class="pv pv--shop">
+                  <i class="pv__glow"></i>
+                  <div class="pv__window"><div class="pv__chrome"><b></b><b></b><b></b><span>ajayshop.app</span></div>
+                    <div class="pv__grid"><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+                  <div class="pv__chip"><span>GraphQL</span><strong>Order #2048 ✓</strong></div>
+                </div>
+              </div>
+              <div class="project__body">
+                <div class="project__top mono"><span>01</span><span>Apr 2026</span></div>
+                <h3 class="project__title">AjayShop</h3>
+                <p class="project__kind">eCommerce Platform</p>
+                <p class="project__desc">Full-stack store with product catalog, cart, order management and an analytics admin dashboard — powered by a GraphQL API over PostgreSQL with a custom type-safe query builder.</p>
+                <div class="tags"><span>TypeScript</span><span>React</span><span>GraphQL</span><span>PostgreSQL</span><span>Node.js</span><span>Docker</span></div>
+                <a class="project__link" href="https://github.com/ajaysriramm90-droid/my-shop" target="_blank" rel="noopener"><span>View on GitHub</span><i>↗</i></a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project" style="--h:28" data-cursor="View">
+            <div class="project__inner">
+              <div class="project__visual" aria-hidden="true">
+                <div class="pv pv--tests">
+                  <i class="pv__glow"></i>
+                  <div class="pv__window"><div class="pv__chrome"><b></b><b></b><b></b><span>testng-report</span></div>
+                    <div class="pv__list"><i></i><i></i><i></i><i></i><i></i></div></div>
+                  <div class="pv__chip"><span>Selenium</span><strong>48 / 48 passed</strong></div>
+                </div>
+              </div>
+              <div class="project__body">
+                <div class="project__top mono"><span>02</span><span>Mar 2026</span></div>
+                <h3 class="project__title">IPL Test Automation</h3>
+                <p class="project__kind">QA Automation Framework</p>
+                <p class="project__desc">An automated testing framework for IPL web applications — validating match data, team details and dynamic content with Selenium and TestNG for reliable, repeatable results.</p>
+                <div class="tags"><span>Java</span><span>Selenium</span><span>TestNG</span></div>
+                <a class="project__link" href="https://github.com/ajaysriramm90-droid/IPL-testing" target="_blank" rel="noopener"><span>View on GitHub</span><i>↗</i></a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project" style="--h:190" data-cursor="View">
+            <div class="project__inner">
+              <div class="project__visual" aria-hidden="true">
+                <div class="pv pv--cal">
+                  <i class="pv__glow"></i>
+                  <div class="pv__window"><div class="pv__chrome"><b></b><b></b><b></b><span>hms / appointments</span></div>
+                    <div class="pv__cal"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+                  <div class="pv__chip"><span>Flask</span><strong>Dr. Rao · 10:30</strong></div>
+                </div>
+              </div>
+              <div class="project__body">
+                <div class="project__top mono"><span>03</span><span>Feb 2026</span></div>
+                <h3 class="project__title">Hospital Management</h3>
+                <p class="project__kind">Healthcare System</p>
+                <p class="project__desc">Streamlines patient registration, appointment scheduling and medical records, with modules for doctors, bookings and billing to improve operational efficiency.</p>
+                <div class="tags"><span>Python</span><span>Flask</span><span>PostgreSQL</span><span>HTML</span><span>CSS</span></div>
+                <a class="project__link" href="https://github.com/ajaysriramm90-droid/HMS" target="_blank" rel="noopener"><span>View on GitHub</span><i>↗</i></a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project" style="--h:150" data-cursor="View">
+            <div class="project__inner">
+              <div class="project__visual" aria-hidden="true">
+                <div class="pv pv--chart">
+                  <i class="pv__glow"></i>
+                  <div class="pv__window"><div class="pv__chrome"><b></b><b></b><b></b><span>finance / overview</span></div>
+                    <div class="pv__bars"><i style="--v:.45"></i><i style="--v:.7"></i><i style="--v:.35"></i><i style="--v:.85"></i><i style="--v:.6"></i><i style="--v:.95"></i><i style="--v:.5"></i></div></div>
+                  <div class="pv__chip"><span>Savings</span><strong>+24.6% ↑</strong></div>
+                </div>
+              </div>
+              <div class="project__body">
+                <div class="project__top mono"><span>04</span><span>Jan 2026</span></div>
+                <h3 class="project__title">Finance &amp; Expense Tracker</h3>
+                <p class="project__kind">MEAN Stack App</p>
+                <p class="project__desc">Manage income, expenses and overall financial activity with real-time tracking and analytics, behind a modern Angular frontend with JWT auth and role-based access control.</p>
+                <div class="tags"><span>TypeScript</span><span>Angular</span><span>Node.js</span><span>Express</span><span>MongoDB</span><span>Docker</span></div>
+                <a class="project__link" href="https://github.com/ajaysriramm90-droid/Personal-Finance-Expense-Tracker" target="_blank" rel="noopener"><span>View on GitHub</span><i>↗</i></a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project" style="--h:255" data-cursor="View">
+            <div class="project__inner">
+              <div class="project__visual" aria-hidden="true">
+                <div class="pv pv--table">
+                  <i class="pv__glow"></i>
+                  <div class="pv__window"><div class="pv__chrome"><b></b><b></b><b></b><span>inventory / stock</span></div>
+                    <div class="pv__table"><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+                  <div class="pv__chip"><span>Low stock</span><strong>3 items ⚑</strong></div>
+                </div>
+              </div>
+              <div class="project__body">
+                <div class="project__top mono"><span>05</span><span>Jan 2026</span></div>
+                <h3 class="project__title">Inventory &amp; Mini CRM</h3>
+                <p class="project__kind">Business Dashboard</p>
+                <p class="project__desc">A MEAN stack dashboard for small businesses to manage inventory, track products, monitor stock and customers — with powerful search &amp; filters and secure JWT authentication.</p>
+                <div class="tags"><span>TypeScript</span><span>Angular</span><span>Node.js</span><span>MongoDB</span><span>Bootstrap</span><span>Docker</span></div>
+                <a class="project__link" href="https://github.com/ajaysriramm90-droid/Inventory-Management-System" target="_blank" rel="noopener"><span>View on GitHub</span><i>↗</i></a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project" style="--h:320" data-cursor="View">
+            <div class="project__inner">
+              <div class="project__visual" aria-hidden="true">
+                <div class="pv pv--nodes">
+                  <i class="pv__glow"></i>
+                  <div class="pv__window"><div class="pv__chrome"><b></b><b></b><b></b><span>model / predict</span></div>
+                    <div class="pv__nodes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+                  <div class="pv__chip"><span>Confidence</span><strong>92.4%</strong></div>
+                </div>
+              </div>
+              <div class="project__body">
+                <div class="project__top mono"><span>06</span><span>Dec 2025</span></div>
+                <h3 class="project__title">Disease Prediction</h3>
+                <p class="project__kind">Machine Learning System</p>
+                <p class="project__desc">Analyses user-provided symptoms and predicts possible diseases using machine-learning algorithms, with an intuitive UI that collects inputs and presents results clearly.</p>
+                <div class="tags"><span>Python</span><span>scikit-learn</span><span>HTML</span><span>CSS</span></div>
+                <a class="project__link" href="https://github.com/ajaysriramm90-droid/Disease-prediction-Model" target="_blank" rel="noopener"><span>View on GitHub</span><i>↗</i></a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 05 JOURNEY ===== -->
+    <section class="section journey" id="journey" data-scene="journey">
+      <div class="container">
+        <header class="section__head">
+          <span class="section__index mono" data-scramble-in>04 / Experience &amp; Education</span>
+          <span class="section__rule" data-rule></span>
+        </header>
+        <h2 class="section__title" data-split-heading>The <em class="serif">journey</em> so far.</h2>
+
+        <div class="timeline" id="timeline">
+          <div class="timeline__line"><i class="timeline__fill"></i><i class="timeline__head"></i></div>
+
+          <article class="t-item" data-side="left">
+            <div class="t-item__dot"></div>
+            <div class="t-item__card" data-tilt>
+              <span class="t-item__date mono">Jul 2025 — Aug 2025</span>
+              <h3>Full Stack Development Intern</h3>
+              <p class="t-item__org">Data Reef Technologies</p>
+              <ul>
+                <li>Developed responsive full-stack web applications using Java, HTML, CSS, JavaScript and SQL.</li>
+                <li>Collaborated with the team to implement features, debug issues and optimise application performance.</li>
+                <li>Designed and integrated RESTful APIs, managed databases and followed best coding practices.</li>
+              </ul>
+              <div class="tags"><span>Java</span><span>REST APIs</span><span>SQL</span><span>JavaScript</span></div>
+            </div>
+          </article>
+
+          <article class="t-item" data-side="right">
+            <div class="t-item__dot"></div>
+            <div class="t-item__card" data-tilt>
+              <span class="t-item__date mono">Jul 2025 — Aug 2025</span>
+              <h3>Webpage UI Design Intern</h3>
+              <p class="t-item__org">TCS iON</p>
+              <ul>
+                <li>Developed responsive web interfaces using HTML, CSS and JavaScript.</li>
+                <li>Applied UI/UX principles to design user-friendly, visually consistent web pages.</li>
+                <li>Gained hands-on experience with modern front-end tools and frameworks.</li>
+              </ul>
+              <div class="tags"><span>UI/UX</span><span>HTML</span><span>CSS</span><span>JavaScript</span></div>
+            </div>
+          </article>
+
+          <article class="t-item" data-side="left">
+            <div class="t-item__dot"></div>
+            <div class="t-item__card" data-tilt>
+              <span class="t-item__date mono">2022 — 2026</span>
+              <h3>B.Tech, Information Technology</h3>
+              <p class="t-item__org">Panimalar Engineering College, Chennai City Campus</p>
+              <div class="t-item__gpa">
+                <span class="t-item__gpa-num"><span data-count="8.19" data-decimals="2">8.19</span><small>/ 10</small></span>
+                <span class="mono">CGPA</span>
+              </div>
+              <div class="tags"><span>Chennai, Tamil Nadu</span><span>Class of 2026</span></div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 06 ACHIEVEMENTS ===== -->
+    <section class="section achievements" id="achievements" data-scene="achievements">
+      <div class="container">
+        <header class="section__head">
+          <span class="section__index mono" data-scramble-in>05 / Achievements &amp; Certifications</span>
+          <span class="section__rule" data-rule></span>
+        </header>
+        <h2 class="section__title" data-split-heading>Proof of <em class="serif">craft.</em></h2>
+
+        <div class="stats">
+          <div class="stat" data-reveal>
+            <span class="stat__num"><span data-count="8.19" data-decimals="2">8.19</span></span>
+            <span class="stat__label mono">CGPA in B.Tech IT</span>
+          </div>
+          <div class="stat" data-reveal>
+            <span class="stat__num"><span data-count="6">6</span><sup>+</sup></span>
+            <span class="stat__label mono">Full-stack projects</span>
+          </div>
+          <div class="stat" data-reveal>
+            <span class="stat__num"><span data-count="2">2</span></span>
+            <span class="stat__label mono">Industry internships</span>
+          </div>
+          <div class="stat" data-reveal>
+            <span class="stat__num"><span data-count="7">7</span></span>
+            <span class="stat__label mono">Certifications earned</span>
+          </div>
+        </div>
+
+        <ul class="certs" id="certs">
+          <li class="cert" data-issuer="NASSCOM" data-hue="150"><span class="cert__no mono">01</span><span class="cert__name">Cybersecurity Analysis &amp; Design</span><span class="cert__issuer">NASSCOM · IT-ITES SSC</span><span class="cert__tag mono">Govt. Approved</span></li>
+          <li class="cert" data-issuer="TCS iON" data-hue="210"><span class="cert__no mono">02</span><span class="cert__name">Information Security: Practitioner's Perspective</span><span class="cert__issuer">TCS iON</span><span class="cert__tag mono">Security</span></li>
+          <li class="cert" data-issuer="Naan Mudhalvan" data-hue="30"><span class="cert__no mono">03</span><span class="cert__name">Full Stack with Java</span><span class="cert__issuer">Naan Mudhalvan</span><span class="cert__tag mono">Govt. Certification</span></li>
+          <li class="cert" data-issuer="Google" data-hue="80"><span class="cert__no mono">04</span><span class="cert__name">5-Day AI Agents Intensive Course</span><span class="cert__issuer">Google</span><span class="cert__tag mono">Golden Certification</span></li>
+          <li class="cert" data-issuer="NLP" data-hue="280"><span class="cert__no mono">05</span><span class="cert__name">NLP and Text Mining for Beginners</span><span class="cert__issuer">Government Certification</span><span class="cert__tag mono">AI / ML</span></li>
+          <li class="cert" data-issuer="TCS iON" data-hue="190"><span class="cert__no mono">06</span><span class="cert__name">Webpage UI Design</span><span class="cert__issuer">TCS iON</span><span class="cert__tag mono">UI / UX</span></li>
+          <li class="cert" data-issuer="AWS" data-hue="40"><span class="cert__no mono">07</span><span class="cert__name">AWS Academy Cloud Foundations</span><span class="cert__issuer">AWS Academy Graduate</span><span class="cert__tag mono">Cloud</span></li>
+        </ul>
+      </div>
+      <div class="cert-preview" id="certPreview" aria-hidden="true">
+        <div class="cert-preview__inner">
+          <span class="mono">Certified by</span>
+          <strong id="certPreviewIssuer">—</strong>
+          <i class="cert-preview__seal"></i>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 07 CONTACT ===== -->
+    <section class="section contact" id="contact" data-scene="contact">
+      <div class="container contact__inner">
+        <header class="section__head">
+          <span class="section__index mono" data-scramble-in>06 / Contact</span>
+          <span class="section__rule" data-rule></span>
+        </header>
+        <h2 class="contact__title" data-split-heading>
+          Let's build something <em class="serif">remarkable</em> together.
+        </h2>
+        <div class="contact__row">
+          <a class="cta" href="mailto:ajaysriramm90@gmail.com" data-magnetic data-cursor="Say hi">
+            <span class="cta__fill"></span>
+            <span class="cta__text">Get in<br />touch</span>
+            <svg class="cta__ring" viewBox="0 0 200 200" aria-hidden="true">
+              <defs><path id="circlePath" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0" /></defs>
+              <text><textPath href="#circlePath">OPEN TO OPPORTUNITIES ✦ SOFTWARE ENGINEER ✦ 2026 ✦ </textPath></text>
+            </svg>
+          </a>
+          <div class="contact__details">
+            <button class="contact__email" id="copyEmail" data-cursor="Copy" type="button">
+              <span class="mono">Email — click to copy</span>
+              <strong>ajaysriramm90@gmail.com</strong>
+            </button>
+            <div class="contact__links">
+              <a href="https://www.linkedin.com/in/ajaysriramm" target="_blank" rel="noopener" data-magnetic class="pill"><span>LinkedIn</span><i>↗</i></a>
+              <a href="https://github.com/ajaysriramm90-droid" target="_blank" rel="noopener" data-magnetic class="pill"><span>GitHub</span><i>↗</i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="big-marquee" data-marquee aria-hidden="true">
+        <div class="marquee__row" data-dir="-1">
+          <span>Available for work</span><b>✦</b><span class="serif">Let's talk</span><b>✦</b><span>Available for work</span><b>✦</b><span class="serif">Let's talk</span><b>✦</b>
+        </div>
+      </div>
+
+      <footer class="footer container">
+        <span class="mono">© 2026 B. Ajay Sri Ramm</span>
+        <span class="mono" data-clock>IST 00:00:00</span>
+        <a href="#hero" class="mono footer__top" data-magnetic>Back to top ↑</a>
+      </footer>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="/assets/vendor/gsap-3.13.0/gsap.min.js" defer></script>
+  <script src="/assets/vendor/gsap-3.13.0/ScrollTrigger.min.js" defer></script>
+  <script src="/assets/vendor/gsap-3.13.0/SplitText.min.js" defer></script>
+  <script src="/assets/vendor/gsap-3.13.0/ScrambleTextPlugin.min.js" defer></script>
+  <script src="/assets/vendor/lenis-1.3.4/lenis.min.js" defer></script>
+  <script type="module" src="/assets/js/main.js"></script>
+</body>
+</html>
