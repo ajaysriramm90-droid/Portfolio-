@@ -86,6 +86,7 @@
     </a>
     <nav class="nav__links" aria-label="Primary">
       <a href="#about" data-scramble>About</a>
+      <a href="#process" data-scramble>Process</a>
       <a href="#skills" data-scramble>Skills</a>
       <a href="#work" data-scramble>Work</a>
       <a href="#journey" data-scramble>Journey</a>
@@ -105,11 +106,12 @@
       <ul class="menu__list">
         <li><a href="#hero"><em>01</em><span>Home</span></a></li>
         <li><a href="#about"><em>02</em><span>About</span></a></li>
-        <li><a href="#skills"><em>03</em><span>Skills</span></a></li>
-        <li><a href="#work"><em>04</em><span>Work</span></a></li>
-        <li><a href="#journey"><em>05</em><span>Journey</span></a></li>
-        <li><a href="#achievements"><em>06</em><span>Achievements</span></a></li>
-        <li><a href="#contact"><em>07</em><span>Contact</span></a></li>
+        <li><a href="#process"><em>03</em><span>Process</span></a></li>
+        <li><a href="#skills"><em>04</em><span>Skills</span></a></li>
+        <li><a href="#work"><em>05</em><span>Work</span></a></li>
+        <li><a href="#journey"><em>06</em><span>Journey</span></a></li>
+        <li><a href="#achievements"><em>07</em><span>Achievements</span></a></li>
+        <li><a href="#contact"><em>08</em><span>Contact</span></a></li>
       </ul>
       <div class="menu__foot">
         <a href="mailto:ajaysriramm90@gmail.com">ajaysriramm90@gmail.com</a>
@@ -141,9 +143,12 @@
         </h1>
         <div class="hero__bottom">
           <p class="hero__lead" data-intro-lines>I engineer scalable, type-safe web products — from GraphQL APIs and databases to interfaces that feel effortless.</p>
-          <a href="#work" class="hero__scroll" data-intro-fade data-magnetic>
-            <span class="mono">Scroll to explore</span>
-            <span class="hero__scroll-track"><i></i></span>
+          <a href="#about" class="hero__badge" data-intro-fade data-magnetic aria-label="Scroll to explore">
+            <svg class="hero__badge-ring" viewBox="0 0 160 160" aria-hidden="true">
+              <defs><path id="badgePath" d="M80,80 m-62,0 a62,62 0 1,1 124,0 a62,62 0 1,1 -124,0" /></defs>
+              <text><textPath href="#badgePath">SCROLL TO EXPLORE ✦ SOFTWARE ENGINEER ✦ </textPath></text>
+            </svg>
+            <span class="hero__badge-core"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16m0 0l-6-6m6 6l6-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           </a>
         </div>
       </div>
@@ -184,16 +189,96 @@
       </div>
     </section>
 
+
+    <!-- Scroll-drawn circuit divider -->
+    <div class="divider" data-divider aria-hidden="true">
+      <svg viewBox="0 0 1440 200" preserveAspectRatio="none">
+        <path pathLength="1" class="divider__trace divider__trace--main" d="M0 100 H250 L300 55 H560 L605 100 H835 L880 150 H1115 L1160 100 H1440" />
+        <path pathLength="1" class="divider__trace" d="M0 132 H190 L235 172 H690 L735 132 H1000 L1045 88 H1440" />
+        <path pathLength="1" class="divider__trace" d="M0 68 H410 L455 26 H975 L1020 68 H1440" />
+      </svg>
+      <i class="divider__node" style="left:20.8%;top:27.5%"></i>
+      <i class="divider__node" style="left:42%;top:50%"></i>
+      <i class="divider__node" style="left:61.1%;top:75%"></i>
+      <i class="divider__node" style="left:80.5%;top:50%"></i>
+      <i class="divider__node divider__node--sm" style="left:16.3%;top:86%"></i>
+      <i class="divider__node divider__node--sm" style="left:72.6%;top:44%"></i>
+      <i class="divider__node divider__node--sm" style="left:31.6%;top:13%"></i>
+      <span class="divider__label mono">// 01 → 02</span>
+      <i class="divider__packet"></i>
+    </div>
+
+    <!-- ===== PROCESS (scroll-driven 3D chapter) ===== -->
+    <section class="process" id="process">
+      <div class="container">
+        <header class="section__head">
+          <span class="section__index mono" data-scramble-in>02 / Process</span>
+          <span class="section__rule" data-rule></span>
+        </header>
+        <h2 class="section__title process__title" data-split-heading data-skew>How I <em class="serif">build.</em></h2>
+      </div>
+
+      <aside class="process__rail" aria-hidden="true">
+        <div class="process__rail-inner">
+          <span class="mono" data-rail="0">01 Architect</span>
+          <span class="mono" data-rail="1">02 Engineer</span>
+          <span class="mono" data-rail="2">03 Ship</span>
+          <i class="process__rail-line"><b></b></i>
+        </div>
+      </aside>
+
+      <div class="process__steps">
+        <article class="step" data-scene="process1" data-step="0">
+          <span class="step__bg" aria-hidden="true">Architect</span>
+          <div class="container step__inner">
+            <div class="step__text">
+              <span class="step__no">01</span>
+              <h3 class="step__title" data-split-heading>Architect</h3>
+              <p class="step__lead serif" data-reveal>Model the domain before writing a line.</p>
+              <p class="step__desc" data-reveal>I start with the data — schemas, relationships and API contracts — so every layer above it stays predictable. GraphQL or REST, the shape of the system is decided first.</p>
+              <ul class="step__list" data-reveal><li>Data modelling</li><li>API design</li><li>PostgreSQL · MongoDB</li><li>Type-safe queries</li></ul>
+            </div>
+          </div>
+        </article>
+
+        <article class="step" data-scene="process2" data-step="1">
+          <span class="step__bg" aria-hidden="true">Engineer</span>
+          <div class="container step__inner">
+            <div class="step__text">
+              <span class="step__no">02</span>
+              <h3 class="step__title" data-split-heading>Engineer</h3>
+              <p class="step__lead serif" data-reveal>Clean code, tested hard.</p>
+              <p class="step__desc" data-reveal>Java and TypeScript across the stack — React or Angular on the front, Node.js, Express and Flask behind it — with authentication, role-based access and automated tests with Selenium and TestNG.</p>
+              <ul class="step__list" data-reveal><li>Java · TypeScript</li><li>React · Angular</li><li>JWT &amp; RBAC</li><li>Selenium · TestNG</li></ul>
+            </div>
+          </div>
+        </article>
+
+        <article class="step" data-scene="process3" data-step="2">
+          <span class="step__bg" aria-hidden="true">Ship&nbsp;it</span>
+          <div class="container step__inner">
+            <div class="step__text">
+              <span class="step__no">03</span>
+              <h3 class="step__title" data-split-heading>Ship</h3>
+              <p class="step__lead serif" data-reveal>Containerised, versioned, deployed.</p>
+              <p class="step__desc" data-reveal>Docker images, clean Git workflows and cloud foundations from AWS Academy — so what works on my machine works everywhere, and keeps improving release after release.</p>
+              <ul class="step__list" data-reveal><li>Docker</li><li>Git · GitHub</li><li>AWS Cloud</li><li>Performance tuning</li></ul>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
     <!-- ===== 03 SKILLS ===== -->
     <section class="section skills" id="skills" data-scene="skills">
       <div class="container">
         <header class="section__head">
-          <span class="section__index mono" data-scramble-in>02 / Skills &amp; Expertise</span>
+          <span class="section__index mono" data-scramble-in>03 / Skills &amp; Expertise</span>
           <span class="section__rule" data-rule></span>
         </header>
         <div class="skills__grid">
           <div class="skills__intro">
-            <h2 class="section__title" data-split-heading>A toolkit built for <em class="serif">shipping.</em></h2>
+            <h2 class="section__title" data-split-heading data-skew>A toolkit built for <em class="serif">shipping.</em></h2>
             <p class="muted" data-reveal>Drag, hover or tap the sphere — every node is a technology I've used to build real products.</p>
           </div>
           <div class="sphere" id="sphere" data-cursor="Drag" aria-label="Interactive skills sphere" role="img"></div>
@@ -233,16 +318,35 @@
       </div>
     </section>
 
+
+    <!-- Scroll-drawn circuit divider -->
+    <div class="divider" data-divider aria-hidden="true">
+      <svg viewBox="0 0 1440 200" preserveAspectRatio="none">
+        <path pathLength="1" class="divider__trace divider__trace--main" d="M0 100 H250 L300 55 H560 L605 100 H835 L880 150 H1115 L1160 100 H1440" />
+        <path pathLength="1" class="divider__trace" d="M0 132 H190 L235 172 H690 L735 132 H1000 L1045 88 H1440" />
+        <path pathLength="1" class="divider__trace" d="M0 68 H410 L455 26 H975 L1020 68 H1440" />
+      </svg>
+      <i class="divider__node" style="left:20.8%;top:27.5%"></i>
+      <i class="divider__node" style="left:42%;top:50%"></i>
+      <i class="divider__node" style="left:61.1%;top:75%"></i>
+      <i class="divider__node" style="left:80.5%;top:50%"></i>
+      <i class="divider__node divider__node--sm" style="left:16.3%;top:86%"></i>
+      <i class="divider__node divider__node--sm" style="left:72.6%;top:44%"></i>
+      <i class="divider__node divider__node--sm" style="left:31.6%;top:13%"></i>
+      <span class="divider__label mono">// build → ship</span>
+      <i class="divider__packet"></i>
+    </div>
+
     <!-- ===== 04 WORK ===== -->
     <section class="section work" id="work" data-scene="work">
       <div class="work__pin">
         <div class="container work__head">
           <header class="section__head">
-            <span class="section__index mono" data-scramble-in>03 / Selected Work</span>
+            <span class="section__index mono" data-scramble-in>04 / Selected Work</span>
             <span class="section__rule" data-rule></span>
           </header>
           <div class="work__title-row">
-            <h2 class="section__title" data-split-heading>Featured <em class="serif">projects.</em></h2>
+            <h2 class="section__title" data-split-heading data-skew>Featured <em class="serif">projects.</em></h2>
             <div class="work__progress mono" aria-hidden="true"><span id="workCurrent">01</span><i><b id="workBar"></b></i><span>06</span></div>
           </div>
         </div>
@@ -381,10 +485,10 @@
     <section class="section journey" id="journey" data-scene="journey">
       <div class="container">
         <header class="section__head">
-          <span class="section__index mono" data-scramble-in>04 / Experience &amp; Education</span>
+          <span class="section__index mono" data-scramble-in>05 / Experience &amp; Education</span>
           <span class="section__rule" data-rule></span>
         </header>
-        <h2 class="section__title" data-split-heading>The <em class="serif">journey</em> so far.</h2>
+        <h2 class="section__title" data-split-heading data-skew>The <em class="serif">journey</em> so far.</h2>
 
         <div class="timeline" id="timeline">
           <div class="timeline__line"><i class="timeline__fill"></i><i class="timeline__head"></i></div>
@@ -440,10 +544,10 @@
     <section class="section achievements" id="achievements" data-scene="achievements">
       <div class="container">
         <header class="section__head">
-          <span class="section__index mono" data-scramble-in>05 / Achievements &amp; Certifications</span>
+          <span class="section__index mono" data-scramble-in>06 / Achievements &amp; Certifications</span>
           <span class="section__rule" data-rule></span>
         </header>
-        <h2 class="section__title" data-split-heading>Proof of <em class="serif">craft.</em></h2>
+        <h2 class="section__title" data-split-heading data-skew>Proof of <em class="serif">craft.</em></h2>
 
         <div class="stats">
           <div class="stat" data-reveal>
@@ -483,14 +587,33 @@
       </div>
     </section>
 
+
+    <!-- Scroll-drawn circuit divider -->
+    <div class="divider" data-divider aria-hidden="true">
+      <svg viewBox="0 0 1440 200" preserveAspectRatio="none">
+        <path pathLength="1" class="divider__trace divider__trace--main" d="M0 100 H250 L300 55 H560 L605 100 H835 L880 150 H1115 L1160 100 H1440" />
+        <path pathLength="1" class="divider__trace" d="M0 132 H190 L235 172 H690 L735 132 H1000 L1045 88 H1440" />
+        <path pathLength="1" class="divider__trace" d="M0 68 H410 L455 26 H975 L1020 68 H1440" />
+      </svg>
+      <i class="divider__node" style="left:20.8%;top:27.5%"></i>
+      <i class="divider__node" style="left:42%;top:50%"></i>
+      <i class="divider__node" style="left:61.1%;top:75%"></i>
+      <i class="divider__node" style="left:80.5%;top:50%"></i>
+      <i class="divider__node divider__node--sm" style="left:16.3%;top:86%"></i>
+      <i class="divider__node divider__node--sm" style="left:72.6%;top:44%"></i>
+      <i class="divider__node divider__node--sm" style="left:31.6%;top:13%"></i>
+      <span class="divider__label mono">// handshake.init()</span>
+      <i class="divider__packet"></i>
+    </div>
+
     <!-- ===== 07 CONTACT ===== -->
     <section class="section contact" id="contact" data-scene="contact">
       <div class="container contact__inner">
         <header class="section__head">
-          <span class="section__index mono" data-scramble-in>06 / Contact</span>
+          <span class="section__index mono" data-scramble-in>07 / Contact</span>
           <span class="section__rule" data-rule></span>
         </header>
-        <h2 class="contact__title" data-split-heading>
+        <h2 class="contact__title" data-split-heading data-skew>
           Let's build something <em class="serif">remarkable</em> together.
         </h2>
         <div class="contact__row">
@@ -519,6 +642,11 @@
         <div class="marquee__row" data-dir="-1">
           <span>Available for work</span><b>✦</b><span class="serif">Let's talk</span><b>✦</b><span>Available for work</span><b>✦</b><span class="serif">Let's talk</span><b>✦</b>
         </div>
+      </div>
+
+      <div class="signature" aria-hidden="true">
+        <span class="signature__outline">Ajay Sri Ramm</span>
+        <span class="signature__fill">Ajay Sri Ramm</span>
       </div>
 
       <footer class="footer container">

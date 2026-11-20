@@ -29,6 +29,14 @@ assets/js/scene.js    WebGL scene (lazy-loaded): core, rings, particles, grid, b
 assets/vendor/        three 0.170.0, gsap 3.13.0, lenis 1.3.4
 ```
 
+## Scroll graphics at a glance
+
+- **Morphing particle sculpture.** About 6,000 points (2,500 on phones) rebuild themselves into a new shape for each section: a spiral galaxy, a DNA helix, a lattice cube, a torus knot, a wire globe, atomic orbits, a wave terrain, a vortex, a starburst and an accretion halo. All shapes are stored in one float texture and the GPU blends between them.
+- **Process chapter.** Three full-screen steps (Architect, Engineer, Ship). Each has a liquid-fill number, a giant outlined word sliding behind it and a sticky progress rail.
+- **Circuit dividers.** SVG traces draw themselves as you scroll, nodes light up and a glowing packet travels along the line.
+- **Cinematic camera.** The field of view widens and the camera banks with scroll speed, and an RGB-split lens effect strengthens as you scroll faster (desktop).
+- **Kinetic type.** Big titles lean into the scroll direction, the hero has a rotating seal, and the footer signature fills with a gradient on scroll.
+
 ## Performance & accessibility
 
 - A device tier decides the 3D experience. Desktop gets bloom and a high-detail mesh. Phones and tablets get a lighter scene, native touch scrolling and stacked project cards. Weak devices or no WebGL2 get an animated CSS fallback.

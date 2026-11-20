@@ -34,14 +34,18 @@ float snoise(vec3 v){
 // Per-section scene keyframes.
 // c* camera, l* look-at, p* core position, s core scale, amp surface turbulence,
 // ring ring spread, spread particle field, grid floor opacity, hue 0=volt 1=violet.
+// Morph cloud: shape = target index (ordered like the page), m* = cloud position / scale / tilt / opacity.
 const KF = {
-  hero:         { cx: 0,    cy: 0,    cz: 6.4, lx: 0,   ly: 0,    px: 0.9,  py: 0.2,  pz: -0.6, s: 1.0,  amp: 0.17, ring: 1.0,  spread: 1.0,  grid: 0.25, hue: 0.0,  glow: 0.9, dim: 1.0 },
-  about:        { cx: -0.6, cy: 0.3,  cz: 6.0, lx: 0.2, ly: 0,    px: -2.7, py: -1.3, pz: -1.6, s: 0.58, amp: 0.13, ring: 0.8,  spread: 1.15, grid: 0.1,  hue: 0.25, glow: 0.7, dim: 0.72 },
-  skills:       { cx: 0,    cy: 0.2,  cz: 8.6, lx: 0,   ly: 0,    px: -2.4, py: 0.2,  pz: -1.2, s: 0.62, amp: 0.28, ring: 1.85, spread: 1.6,  grid: 0.0,  hue: 0.55, glow: 1.0, dim: 0.9 },
-  work:         { cx: 0.6,  cy: -0.3, cz: 7.2, lx: 0,   ly: 0,    px: 2.9,  py: 1.4,  pz: -3.2, s: 0.7,  amp: 0.12, ring: 0.6,  spread: 0.9,  grid: 0.35, hue: 0.85, glow: 0.7, dim: 0.85 },
-  journey:      { cx: 0,    cy: -1.4, cz: 6.6, lx: 0,   ly: -0.9, px: 0,    py: 0.6,  pz: -4.5, s: 0.5,  amp: 0.18, ring: 1.3,  spread: 1.2,  grid: 0.9,  hue: 0.4,  glow: 0.8, dim: 0.75 },
-  achievements: { cx: 0.4,  cy: 0.1,  cz: 6.2, lx: 0,   ly: 0,    px: 3.7,  py: 0.9,  pz: -2.0, s: 0.72, amp: 0.24, ring: 0.95, spread: 1.35, grid: 0.2,  hue: 0.7,  glow: 0.9, dim: 0.75 },
-  contact:      { cx: 0,    cy: 0,    cz: 5.6, lx: 0,   ly: 0,    px: 2.7,  py: 0.15, pz: -1.0, s: 0.95, amp: 0.3,  ring: 1.3,  spread: 0.85, grid: 0.4,  hue: 0.0,  glow: 1.1, dim: 0.95 },
+  hero:         { cx: 0,    cy: 0,    cz: 6.4, lx: 0,   ly: 0,    px: 0.9,  py: 0.2,  pz: -0.6, s: 1.0,  amp: 0.17, ring: 1.0,  spread: 1.0,  grid: 0.25, hue: 0.0,  glow: 0.9, dim: 1.0,  shape: 0, mx: 0.9,  my: 0.2,  mz: -0.6, ms: 1.0,  mt: 1.15, mo: 0.8,  wave: 0 },
+  about:        { cx: -0.6, cy: 0.3,  cz: 6.0, lx: 0.2, ly: 0,    px: -2.7, py: -1.3, pz: -1.6, s: 0.58, amp: 0.13, ring: 0.8,  spread: 1.15, grid: 0.1,  hue: 0.25, glow: 0.7, dim: 0.72, shape: 1, mx: -3.5, my: 0.5,  mz: -2.4, ms: 0.85, mt: 0.18, mo: 0.5,  wave: 0 },
+  process1:     { cx: 0,    cy: 0,    cz: 6.5, lx: 0.3, ly: 0,    px: 2.25, py: 0,    pz: 0,    s: 0.24, amp: 0.2,  ring: 0.4, spread: 1.3,  grid: 0.15, hue: 0.12, glow: 0.9, dim: 0.95, shape: 2, mx: 2.25, my: 0,    mz: 0,    ms: 0.9,  mt: 0.45, mo: 1.0,  wave: 0 },
+  process2:     { cx: 0,    cy: 0,    cz: 6.5, lx: 0.3, ly: 0,    px: 2.25, py: 0,    pz: 0,    s: 0.24, amp: 0.3,  ring: 0.4,  spread: 1.3,  grid: 0.15, hue: 0.5,  glow: 0.9, dim: 0.95, shape: 3, mx: 2.25, my: 0,    mz: 0,    ms: 0.9,  mt: 0.3,  mo: 1.0,  wave: 0 },
+  process3:     { cx: 0,    cy: 0,    cz: 6.5, lx: 0.3, ly: 0,    px: 2.25, py: 0,    pz: 0,    s: 0.28, amp: 0.22, ring: 0.45,  spread: 1.3,  grid: 0.15, hue: 0.82, glow: 1.0, dim: 0.95, shape: 4, mx: 2.25, my: 0,    mz: 0,    ms: 0.95, mt: 0.4,  mo: 1.0,  wave: 0 },
+  skills:       { cx: 0,    cy: 0.2,  cz: 8.6, lx: 0,   ly: 0,    px: -2.4, py: 0.2,  pz: -1.2, s: 0.62, amp: 0.28, ring: 1.85, spread: 1.6,  grid: 0.0,  hue: 0.55, glow: 1.0, dim: 0.9,  shape: 5, mx: -2.4, my: 0.2,  mz: -1.2, ms: 1.1,  mt: 0.5,  mo: 0.75, wave: 0 },
+  work:         { cx: 0.6,  cy: -0.3, cz: 7.2, lx: 0,   ly: 0,    px: 2.9,  py: 1.4,  pz: -3.2, s: 0.7,  amp: 0.12, ring: 0.6,  spread: 0.9,  grid: 0.12, hue: 0.85, glow: 0.7, dim: 0.85, shape: 6, mx: 0,    my: -1.5, mz: -4.2, ms: 2.3,  mt: 0.38, mo: 0.95,  wave: 1 },
+  journey:      { cx: 0,    cy: -1.4, cz: 6.6, lx: 0,   ly: -0.9, px: 0,    py: 0.6,  pz: -4.5, s: 0.5,  amp: 0.18, ring: 1.3,  spread: 1.2,  grid: 0.9,  hue: 0.4,  glow: 0.8, dim: 0.75, shape: 7, mx: 0,    my: -0.6, mz: -2.6, ms: 1.15, mt: 0.12, mo: 0.75,  wave: 0 },
+  achievements: { cx: 0.4,  cy: 0.1,  cz: 6.2, lx: 0,   ly: 0,    px: 3.7,  py: 0.9,  pz: -2.0, s: 0.72, amp: 0.24, ring: 0.95, spread: 1.35, grid: 0.2,  hue: 0.7,  glow: 0.9, dim: 0.75, shape: 8, mx: 3.7,  my: 0.9,  mz: -2.0, ms: 1.0,  mt: 0.3,  mo: 0.8,  wave: 0 },
+  contact:      { cx: 0,    cy: 0,    cz: 5.6, lx: 0,   ly: 0,    px: 2.7,  py: 0.15, pz: -1.0, s: 0.95, amp: 0.3,  ring: 1.3,  spread: 0.85, grid: 0.4,  hue: 0.0,  glow: 1.1, dim: 0.95, shape: 9, mx: 2.7,  my: 0.15, mz: -1.0, ms: 0.78, mt: 1.2,  mo: 0.95, wave: 0 },
 };
 const KEYS = Object.keys(KF.hero);
 
@@ -180,7 +184,7 @@ export async function createScene(canvas, { tier = 'high' } = {}) {
     const radius = 3.2 + Math.random() * 6;
     const theta = Math.random() * Math.PI * 2;
     return {
-      base: new THREE.Vector3(Math.cos(theta) * radius, (Math.random() - 0.5) * 6, Math.sin(theta) * radius * 0.6 - 2),
+      base: new THREE.Vector3(Math.cos(theta) * radius, (Math.random() - 0.5) * 6, Math.min(Math.sin(theta) * radius * 0.4 - 2.6, 0.6)),
       spin: new THREE.Vector3(Math.random(), Math.random(), Math.random()).multiplyScalar(1.2),
       phase: Math.random() * Math.PI * 2,
       scale: 0.6 + Math.random() * 1.6,
@@ -236,6 +240,126 @@ export async function createScene(canvas, { tier = 'high' } = {}) {
   const particles = new THREE.Points(pGeo, pMat);
   scene.add(particles);
 
+  // ---------- Morphing particle sculpture ----------
+  // Every section owns a target shape; all targets live in one float texture and the
+  // vertex shader blends between neighbours as the scroll position moves through the page.
+  const R = Math.random;
+  const gauss = () => (R() + R() + R() - 1.5) / 1.5;
+  const TAU = Math.PI * 2;
+  const SHAPES = [
+    // 0 hero — three-armed spiral galaxy
+    (i) => { const arm = i % 3; const t = R(); const r = 0.55 + Math.pow(t, 0.85) * 3.9; const a = arm * 2.094 + r * 1.05 + gauss() * 0.3; return [Math.cos(a) * r, gauss() * 0.14 * (1.3 - t), Math.sin(a) * r]; },
+    // 1 about — DNA double helix
+    (i) => {
+      const y = (R() - 0.5) * 6.4; const tw = y * 1.45;
+      if (R() < 0.72) { const o = i % 2 ? Math.PI : 0; return [Math.cos(tw + o) * 0.95 + gauss() * 0.05, y, Math.sin(tw + o) * 0.95 + gauss() * 0.05]; }
+      const yy = Math.round(y / 0.32) * 0.32; const k = R() * 2 - 1; return [Math.cos(yy * 1.45) * 0.95 * k, yy + gauss() * 0.02, Math.sin(yy * 1.45) * 0.95 * k];
+    },
+    // 2 process / architect — wireframe lattice cube
+    (i) => { const g = [-1.3, 0, 1.3]; const ax = i % 3; const a = g[(R() * 3) | 0], b = g[(R() * 3) | 0]; const t = (R() * 2 - 1) * 1.3; const j = () => gauss() * 0.02; return ax === 0 ? [t, a + j(), b + j()] : ax === 1 ? [a + j(), t, b + j()] : [a + j(), b + j(), t]; },
+    // 3 process / engineer — torus knot
+    (i) => { const t = R() * TAU; const Rr = 1.3, r = 0.55; const c = Rr + r * Math.cos(3 * t); const k = 0.17 * Math.sqrt(R()); const u = R() * TAU; return [c * Math.cos(2 * t) + Math.cos(u) * k, c * Math.sin(2 * t) + Math.sin(u) * k, r * Math.sin(3 * t) + Math.cos(u + 1.3) * k]; },
+    // 4 process / ship — wire globe
+    (i) => {
+      const Rr = 1.9; const q = R();
+      if (q < 0.35) { const lat = (Math.round(R() * 8) / 8 - 0.5) * Math.PI * 0.92; const lon = R() * TAU; return [Math.cos(lat) * Math.cos(lon) * Rr, Math.sin(lat) * Rr, Math.cos(lat) * Math.sin(lon) * Rr]; }
+      if (q < 0.65) { const lon = (Math.round(R() * 12) / 12) * TAU; const lat = (R() - 0.5) * Math.PI; return [Math.cos(lat) * Math.cos(lon) * Rr, Math.sin(lat) * Rr, Math.cos(lat) * Math.sin(lon) * Rr]; }
+      const u = R() * 2 - 1, th = R() * TAU, sq = Math.sqrt(1 - u * u), rr = Rr * (0.97 + R() * 0.06); return [sq * Math.cos(th) * rr, u * rr, sq * Math.sin(th) * rr];
+    },
+    // 5 skills — atomic orbital shells
+    (i) => {
+      const k = i % 4; const tilts = [[0.2, 0], [1.15, 0], [1.15, 2.1], [1.15, 4.2]];
+      const r = 1.9 + k * 0.1 + gauss() * 0.05; const a = R() * TAU;
+      const x = Math.cos(a) * r, y = gauss() * 0.03, z = Math.sin(a) * r; const [tx, ry] = tilts[k];
+      const y2 = y * Math.cos(tx) - z * Math.sin(tx), z2 = y * Math.sin(tx) + z * Math.cos(tx);
+      return [x * Math.cos(ry) + z2 * Math.sin(ry), y2, -x * Math.sin(ry) + z2 * Math.cos(ry)];
+    },
+    // 6 work — wireframe terrain disc (waves animate in the shader)
+    (i) => { const r = Math.sqrt(R()) * 3.6; const a = R() * TAU; let x = Math.cos(a) * r, z = Math.sin(a) * r; if (i % 2) x = Math.round(x / 0.3) * 0.3; else z = Math.round(z / 0.3) * 0.3; return [x, Math.sin(x * 0.9) * 0.22 + Math.cos(z * 1.2) * 0.18, z]; },
+    // 7 journey — rising vortex
+    (i) => { const t = R(); const y = (t - 0.5) * 6.4; const r = 0.22 + Math.pow(t, 1.8) * 2.3 + gauss() * 0.05; const a = (i % 5) * 1.2566 + y * 1.8 + gauss() * 0.22; return [Math.cos(a) * r, y, Math.sin(a) * r]; },
+    // 8 achievements — starburst
+    (i) => { const n = 34; const k = i % n; const yv = 1 - (k / (n - 1)) * 2; const rr = Math.sqrt(1 - yv * yv); const ph = k * 2.39996; const len = 0.35 + Math.pow(R(), 1.5) * 2.5; return [Math.cos(ph) * rr * len + gauss() * 0.02, yv * len + gauss() * 0.02, Math.sin(ph) * rr * len + gauss() * 0.02]; },
+    // 9 contact — accretion halo
+    (i) => { const r = 1.85 + Math.pow(R(), 1.5) * 1.7 + gauss() * 0.05; const a = R() * TAU; return [Math.cos(a) * r, gauss() * 0.05 * (r - 1.4), Math.sin(a) * r]; },
+  ];
+  const MW = 128;
+  const mCount = mobile ? 2560 : 6144;
+  const mRows = Math.ceil(mCount / MW);
+  const mData = new Float32Array(MW * mRows * SHAPES.length * 4);
+  SHAPES.forEach((fn, si) => {
+    for (let i = 0; i < mCount; i++) {
+      const [x, y, z] = fn(i);
+      const o = ((si * mRows + Math.floor(i / MW)) * MW + (i % MW)) * 4;
+      mData[o] = x; mData[o + 1] = y; mData[o + 2] = z; mData[o + 3] = 1;
+    }
+  });
+  const mTex = new THREE.DataTexture(mData, MW, mRows * SHAPES.length, THREE.RGBAFormat, THREE.FloatType);
+  mTex.needsUpdate = true;
+
+  const mGeo = new THREE.BufferGeometry();
+  const mIdx = new Float32Array(mCount), mSeed = new Float32Array(mCount), mRand = new Float32Array(mCount * 3);
+  for (let i = 0; i < mCount; i++) {
+    mIdx[i] = i; mSeed[i] = R();
+    const u = R() * 2 - 1, th = R() * TAU, sq = Math.sqrt(1 - u * u), l = 0.6 + R() * 1.4;
+    mRand[i * 3] = sq * Math.cos(th) * l; mRand[i * 3 + 1] = u * l; mRand[i * 3 + 2] = sq * Math.sin(th) * l;
+  }
+  mGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(mCount * 3), 3));
+  mGeo.setAttribute('aIndex', new THREE.BufferAttribute(mIdx, 1));
+  mGeo.setAttribute('aSeed', new THREE.BufferAttribute(mSeed, 1));
+  mGeo.setAttribute('aRand', new THREE.BufferAttribute(mRand, 3));
+  const mMat = new THREE.ShaderMaterial({
+    uniforms: {
+      uTargets: { value: mTex }, uRows: { value: mRows }, uCount: { value: SHAPES.length }, uShape: { value: 0 },
+      uTime: { value: 0 }, uSpin: { value: 0 }, uPR: { value: renderer.getPixelRatio() }, uSize: { value: mobile ? 2.8 : 2.6 },
+      uWave: { value: 0 }, uScatter: { value: 0.9 }, uKick: { value: 0 }, uOpacity: { value: 0 },
+      uColA: { value: VOLT.clone() }, uColB: { value: VIOLET.clone() },
+    },
+    vertexShader: /* glsl */ `
+      uniform sampler2D uTargets; uniform float uRows; uniform float uCount; uniform float uShape;
+      uniform float uTime; uniform float uSpin; uniform float uPR; uniform float uSize;
+      uniform float uWave; uniform float uScatter; uniform float uKick;
+      attribute float aIndex; attribute float aSeed; attribute vec3 aRand;
+      varying float vA; varying float vSeed;
+      vec3 shapePos(float s){
+        int i = int(aIndex); int rows = int(uRows);
+        return texelFetch(uTargets, ivec2(i - (i / 128) * 128, int(s) * rows + i / 128), 0).xyz;
+      }
+      void main(){
+        float f = floor(uShape);
+        float fn = min(f + 1.0, uCount - 1.0);
+        float t = clamp((uShape - f) * 1.6 - aSeed * 0.6, 0.0, 1.0);
+        t = t * t * (3.0 - 2.0 * t);
+        vec3 p = mix(shapePos(f), shapePos(fn), t);
+        p += aRand * (sin(t * 3.14159) * uScatter + uKick);
+        p.y += sin(p.x * 1.3 + uTime * 1.1) * cos(p.z * 1.1 + uTime * 0.8) * 0.3 * uWave;
+        p += aRand * 0.025 * sin(uTime * 1.8 + aSeed * 40.0);
+        float c = cos(uSpin), s = sin(uSpin);
+        p = vec3(p.x * c - p.z * s, p.y, p.x * s + p.z * c);
+        vec4 mv = modelViewMatrix * vec4(p, 1.0);
+        gl_Position = projectionMatrix * mv;
+        gl_PointSize = uSize * uPR * (0.45 + aSeed * 1.1) * (6.5 / -mv.z);
+        vA = smoothstep(0.3, 2.0, -mv.z) * (0.55 + 0.45 * sin(uTime * 1.6 + aSeed * 50.0));
+        vSeed = aSeed;
+      }`,
+    fragmentShader: /* glsl */ `
+      uniform vec3 uColA; uniform vec3 uColB; uniform float uOpacity; varying float vA; varying float vSeed;
+      void main(){
+        float d = length(gl_PointCoord - 0.5);
+        float a = smoothstep(0.5, 0.05, d);
+        vec3 col = mix(uColA, uColB, smoothstep(0.45, 1.0, vSeed));
+        col = mix(col, vec3(1.0), step(0.94, vSeed) * 0.75);
+        gl_FragColor = vec4(col * 1.5, a * vA * uOpacity);
+      }`,
+    transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+  });
+  const morph = new THREE.Points(mGeo, mMat);
+  morph.frustumCulled = false;
+  const morphGroup = new THREE.Group();
+  morphGroup.add(morph);
+  world.add(morphGroup);
+  let mSpin = 0;
+
   // ---------- Architectural grid floor ----------
   const gridMat = new THREE.ShaderMaterial({
     uniforms: { uOpacity: { value: 0 }, uColor: { value: VOLT.clone() }, uTime: { value: 0 } },
@@ -261,18 +385,34 @@ export async function createScene(canvas, { tier = 'high' } = {}) {
   // ---------- Post-processing (desktop tier only, lazy-loaded) ----------
   let composer = null;
   let bloom = null;
+  let rgbShift = null;
   if (!mobile) {
     try {
-      const [{ EffectComposer }, { RenderPass }, { UnrealBloomPass }, { OutputPass }] = await Promise.all([
+      const [{ EffectComposer }, { RenderPass }, { UnrealBloomPass }, { OutputPass }, { ShaderPass }] = await Promise.all([
         import('three/addons/postprocessing/EffectComposer.js'),
         import('three/addons/postprocessing/RenderPass.js'),
         import('three/addons/postprocessing/UnrealBloomPass.js'),
         import('three/addons/postprocessing/OutputPass.js'),
+        import('three/addons/postprocessing/ShaderPass.js'),
       ]);
       composer = new EffectComposer(renderer);
       composer.addPass(new RenderPass(scene, camera));
       bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth / 2, innerHeight / 2), 0.42, 0.7, 0.86);
       composer.addPass(bloom);
+      // Lens-style RGB split that intensifies with scroll speed.
+      rgbShift = new ShaderPass({
+        uniforms: { tDiffuse: { value: null }, uAmount: { value: 0.0015 } },
+        vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
+        fragmentShader: `uniform sampler2D tDiffuse; uniform float uAmount; varying vec2 vUv;
+          void main(){
+            vec2 d = vUv - 0.5; vec2 off = d * uAmount * (0.4 + dot(d, d) * 3.0);
+            vec4 c = texture2D(tDiffuse, vUv);
+            c.r = texture2D(tDiffuse, vUv + off).r;
+            c.b = texture2D(tDiffuse, vUv - off).b;
+            gl_FragColor = c;
+          }`,
+      });
+      composer.addPass(rgbShift);
       composer.addPass(new OutputPass());
     } catch (e) {
       composer = null;
@@ -290,6 +430,7 @@ export async function createScene(canvas, { tier = 'high' } = {}) {
   let time = 0;
   let spinAccum = 0;
   let w = innerWidth, h = innerHeight;
+  let baseFov = 38;
 
   function refresh() {
     const sy = window.scrollY;
@@ -317,17 +458,23 @@ export async function createScene(canvas, { tier = 'high' } = {}) {
       tgt.pz -= 1.4;
       tgt.cx *= 0.4;
       tgt.dim *= 0.8;
+      tgt.mx *= 0.15;
+      tgt.my = tgt.my * 0.5 + 1.0;
+      tgt.mz -= 1.2;
+      tgt.mo *= 0.6;
     }
   }
 
   function resize() {
     w = innerWidth; h = innerHeight;
     camera.aspect = w / h;
-    camera.fov = w / h < 0.8 ? 58 : mobile ? 50 : 38;
+    baseFov = w / h < 0.8 ? 58 : mobile ? 50 : 38;
+    camera.fov = baseFov;
     camera.updateProjectionMatrix();
     renderer.setSize(w, h, false);
     if (composer) { composer.setSize(w, h); composer.setPixelRatio(renderer.getPixelRatio()); }
     pMat.uniforms.uPR.value = renderer.getPixelRatio();
+    mMat.uniforms.uPR.value = renderer.getPixelRatio();
     refresh();
   }
 
@@ -351,6 +498,10 @@ export async function createScene(canvas, { tier = 'high' } = {}) {
     camera.position.set(cur.cx + pointer.sx * 0.38, cur.cy - pointer.sy * 0.26, cur.cz);
     look.set(cur.lx + pointer.sx * 0.12, cur.ly - pointer.sy * 0.08, 0);
     camera.lookAt(look);
+    // Cinematic speed feel: FOV opens and the camera banks slightly with scroll velocity.
+    camera.fov = baseFov + Math.min(vAbs * 0.14, 7);
+    camera.updateProjectionMatrix();
+    camera.rotation.z += clamp(sVel * 0.0012, -0.05, 0.05);
 
     // Core
     const introEase = intro.v;
@@ -400,6 +551,22 @@ export async function createScene(canvas, { tier = 'high' } = {}) {
       debris.setMatrixAt(i, dummy.matrix);
     }
     debris.instanceMatrix.needsUpdate = true;
+
+    // Morph sculpture
+    mSpin += dt * (0.12 + vAbs * 0.006);
+    morphGroup.position.set(cur.mx, cur.my, cur.mz);
+    morphGroup.scale.setScalar(cur.ms * (0.4 + 0.6 * introEase));
+    morphGroup.rotation.x = cur.mt + pointer.sy * 0.12;
+    morphGroup.rotation.z = pointer.sx * -0.08;
+    mMat.uniforms.uShape.value = clamp(cur.shape, 0, SHAPES.length - 1);
+    mMat.uniforms.uSpin.value = mSpin;
+    mMat.uniforms.uTime.value = time;
+    mMat.uniforms.uWave.value = cur.wave;
+    mMat.uniforms.uKick.value = Math.min(vAbs * 0.006, 0.35);
+    mMat.uniforms.uOpacity.value = cur.mo * cur.dim * introEase;
+    mMat.uniforms.uColA.value.copy(tmpColor);
+    mMat.uniforms.uColB.value.copy(VIOLET).lerp(VOLT, cur.hue);
+    if (rgbShift) rgbShift.uniforms.uAmount.value = 0.0015 + Math.min(vAbs * 0.0005, 0.02);
 
     // Particles & grid
     pMat.uniforms.uTime.value = time;

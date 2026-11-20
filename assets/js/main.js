@@ -162,7 +162,8 @@ function heroScroll() {
   tl.to(lines[0], { xPercent: -14, ease: 'none' }, 0)
     .to(lines[1], { xPercent: 10, ease: 'none' }, 0)
     .to('.hero__content', { yPercent: -18, opacity: 0, scale: 0.94, ease: 'power1.in' }, 0)
-    .to('.hero__meta', { y: -60, opacity: 0, ease: 'none' }, 0);
+    .to('.hero__meta', { y: -60, opacity: 0, ease: 'none' }, 0)
+    .to('.hero__badge-ring', { rotation: 300, ease: 'none' }, 0);
 }
 
 /* ---------------------------------------------------------
@@ -578,8 +579,8 @@ function setupWork() {
       const next = cards[i + 1];
       if (next) {
         gsap.to(inner, {
-          scale: 0.9, opacity: 0.35, rotationX: 8, transformPerspective: 1200, ease: 'none',
-          scrollTrigger: { trigger: next, start: 'top bottom', end: 'top 20%', scrub: true },
+          scale: 0.9, '--shade': 0.78, rotationX: 8, transformPerspective: 1200, ease: 'none',
+          scrollTrigger: { trigger: next, start: 'top 70%', end: 'top 15%', scrub: true },
         });
       }
       gsap.from($('.pv__window', card), {
@@ -697,6 +698,93 @@ function setupContact() {
 }
 
 /* ---------------------------------------------------------
+   Process chapter — liquid-fill numbers, parallax words, progress rail
+   --------------------------------------------------------- */
+function setupProcess() {
+  const steps = $$('.step');
+  if (!steps.length) return;
+  const railLabels = $$('[data-rail]');
+  const railFill = $('.process__rail-line b');
+
+  if (reduce) {
+    gsap.set('.step__no', { backgroundPosition: '0% 100%' });
+    return;
+  }
+
+  steps.forEach((step, i) => {
+    gsap.to($('.step__no', step), {
+      backgroundPosition: '0% 100%', ease: 'none',
+      scrollTrigger: { trigger: step, start: 'top 75%', end: 'center 55%', scrub: true },
+    });
+    gsap.fromTo($('.step__bg', step), { xPercent: 12 }, {
+      xPercent: -38, ease: 'none',
+      scrollTrigger: { trigger: step, start: 'top bottom', end: 'bottom top', scrub: true },
+    });
+    gsap.from($$('.step__list li', step), {
+      y: 24, opacity: 0, scale: 0.9, duration: 0.9, stagger: 0.07, ease: 'back.out(1.8)',
+      scrollTrigger: { trigger: step, start: 'top 45%', toggleActions: 'play none none reverse' },
+    });
+    ScrollTrigger.create({
+      trigger: step, start: 'top center', end: 'bottom center',
+      onToggle: (self) => railLabels[i]?.classList.toggle('is-active', self.isActive),
+    });
+  });
+
+  if (railFill) {
+    gsap.to(railFill, {
+      scaleY: 1, ease: 'none',
+      scrollTrigger: { trigger: '.process__steps', start: 'top center', end: 'bottom center', scrub: true },
+    });
+  }
+}
+
+/* ---------------------------------------------------------
+   Circuit dividers — traces draw, nodes light up, a packet travels
+   --------------------------------------------------------- */
+function setupDividers() {
+  if (reduce) return;
+  $$('[data-divider]').forEach((d) => {
+    const traces = $$('.divider__trace', d);
+    const main = $('.divider__trace--main', d);
+    const nodes = $$('.divider__node', d);
+    const packet = $('.divider__packet', d);
+    const len = main.getTotalLength();
+    traces.forEach((p) => p.setAttribute('pathLength', '1'));
+    const travel = { t: 0 };
+    const tl = gsap.timeline({
+      scrollTrigger: { trigger: d, start: 'top 92%', end: 'bottom 30%', scrub: 0.6 },
+    });
+    tl.to(traces, { strokeDashoffset: 0, ease: 'none', duration: 1, stagger: 0.12 }, 0)
+      .to(nodes, { scale: 1, ease: 'back.out(3)', duration: 0.18, stagger: 0.09 }, 0.1)
+      .fromTo(packet, { opacity: 0 }, { opacity: 1, duration: 0.08 }, 0)
+      .to(travel, {
+        t: 1, duration: 1, ease: 'none',
+        onUpdate() {
+          const pt = main.getPointAtLength(travel.t * len);
+          packet.style.left = `${(pt.x / 1440) * 100}%`;
+          packet.style.top = `${(pt.y / 200) * 100}%`;
+        },
+      }, 0)
+      .to(packet, { opacity: 0, duration: 0.1 }, 0.95);
+  });
+}
+
+/* ---------------------------------------------------------
+   Footer signature — gradient fill sweeps across the name
+   --------------------------------------------------------- */
+function setupSignature() {
+  if (reduce) return;
+  gsap.fromTo('.signature__fill', { clipPath: 'inset(0 100% 0 0)' }, {
+    clipPath: 'inset(0 0% 0 0)', ease: 'none',
+    scrollTrigger: { trigger: '.signature', start: 'top 95%', end: 'bottom 70%', scrub: true },
+  });
+  gsap.fromTo('.signature', { yPercent: 30, letterSpacing: '0.02em' }, {
+    yPercent: 0, letterSpacing: '-0.06em', ease: 'none',
+    scrollTrigger: { trigger: '.signature', start: 'top bottom', end: 'bottom 75%', scrub: true },
+  });
+}
+
+/* ---------------------------------------------------------
    Clock
    --------------------------------------------------------- */
 function setupClock() {
@@ -712,11 +800,20 @@ function setupClock() {
    --------------------------------------------------------- */
 function setupVelocityBridge() {
   let lastY = window.scrollY;
+  // Big titles lean into the scroll direction, then settle.
+  const skewEls = (reduce || !finePointer) ? [] : $$('[data-skew]');
+  const skewSet = skewEls.map((el) => gsap.quickSetter(el, 'skewY', 'deg'));
+  let skew = 0;
   gsap.ticker.add(() => {
     const y = window.scrollY;
     const v = lenis ? lenis.velocity : y - lastY;
     lastY = y;
     scene?.setVelocity(v);
+    if (skewSet.length) {
+      skew += (gsap.utils.clamp(-4, 4, -v * 0.12) - skew) * 0.12;
+      const val = Math.abs(skew) > 0.01 ? skew : 0;
+      skewSet.forEach((set) => set(val));
+    }
     if (marqueeTweens.length) {
       const boost = 1 + Math.min(Math.abs(v) * 0.08, 5);
       const sign = v < -0.5 ? -1 : 1;
@@ -770,6 +867,9 @@ async function boot() {
   setupTimeline();
   setupCerts();
   setupContact();
+  setupProcess();
+  setupDividers();
+  setupSignature();
   textAnimations();
   reveals();
   counters();
